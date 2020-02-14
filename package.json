@@ -1,31 +1,25 @@
 {
   "name": "api-streetcred-agency",
   "version": "1.0.0",
-  "description": "Interface to Streetcred.Id Agency/Credentials REST API",
+  "description": "Angular module interface to Streetcred.Id Agency/Credentials API",
   "main": "index.js",
   "keywords": [
     "angular",
     "typescript",
     "streetcred"
   ],
-  "author": "G. de Beer",
-  "license": "ISC",
-  "scripts": {
-    "ng": "ng",
-    "build": "ng build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "ng lint"
+  "author": {
+    "name": "Gary de Beer",
+    "url": "https://github.com/dibbsza"
   },
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^0.803.25",
-    "@angular/cli": "^8.3.25",
-    "@angular/compiler-cli": "^8.2.14",
-    "@angular/language-service": "^8.2.14",
-    "@types/node": "~8.9.4",
-    "ts-node": "~7.0.0",
-    "tslint": "~5.15.0",
-    "typescript": "~3.5.3"
-  }
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dibbsza/api-streetcred-agency.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "deprecated": false,
+  "devDependencies": {}
 }

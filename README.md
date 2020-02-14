@@ -26,7 +26,7 @@ export const environment = {
 Note: The ApiModule is restricted to being instantiated once app wide.
 This is to ensure that all services are treated as singletons.
 
-In order to use multiple `ApiModules` you need to create an alias name when importing 
+In order to use multiple `ApiModules` you need to create an alias name when importing
 the modules in order to avoid naming conflicts:
 
 In the src/app/app.module.ts:

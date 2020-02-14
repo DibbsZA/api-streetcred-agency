@@ -5,7 +5,7 @@ Angular module to connect to the Streetcred.Id Agency API.
 ## Installation
 
 ```sh
-npm install proofmarket/api-streetcred-agency --save
+npm install api-streetcred-agency --save
 ```
 
 ## General usage
@@ -37,7 +37,7 @@ import {
   BASE_PATH as SC_AGENCY_PATH,
   SC_API_KEY as SC_AGENCY_API_KEY,
   SC_SUBS_KEY as SC_AGENCY_SUBS_KEY
-  } from 'proofmarket/api-streetcred-agency';
+  } from 'api-streetcred-agency';
 
 import { environment } from '../environments/environment';
 
@@ -62,7 +62,7 @@ export class AppModule { }
 In your components.
 
 ```typescript
-import { DefaultApi as StreetcredAgencyDefaultApi } from 'proofmarket/api-streetcred-agency';
+import { DefaultApi as StreetcredAgencyDefaultApi } from 'api-streetcred-agency';
 
 export class AppComponent {
   constructor(private apiGateway: StreetcredAgencyDefaultApi) { }

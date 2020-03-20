@@ -1,12 +1,8 @@
-
 import { Inject, Injectable, Optional } from '@angular/core';
-import {
-  HttpClient, HttpHeaders, HttpParams,
-  HttpResponse, HttpEvent
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpEvent } from '@angular/common/http';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { CredentialDefinitionContract } from '../model/credentialDefinitionContract';
 import { CredentialDefinitionContractArray } from '../model/credentialDefinitionContractArray';
@@ -22,15 +18,17 @@ import { VerificationDefinitionContractArray } from '../model/verificationDefini
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
 
-
 @Injectable()
 export class DefinitionsService {
-
   protected basePath = 'https://api.streetcred.id/agency/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 
-  constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+  constructor(
+    protected httpClient: HttpClient,
+    @Optional() @Inject(BASE_PATH) basePath: string,
+    @Optional() configuration: Configuration
+  ) {
     if (basePath) {
       this.basePath = basePath;
     }
@@ -54,7 +52,6 @@ export class DefinitionsService {
     return false;
   }
 
-
   /**
    * Create new credential definition and schema with the given parameters.
    * Create new credential definition and schema with the given parameters.
@@ -62,12 +59,26 @@ export class DefinitionsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createCredentialDefinition(credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters, observe?: 'body', reportProgress?: boolean): Observable<CredentialDefinitionContract>;
-  public createCredentialDefinition(credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CredentialDefinitionContract>>;
-  public createCredentialDefinition(credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CredentialDefinitionContract>>;
-  public createCredentialDefinition(credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
-
+  public createCredentialDefinition(
+    credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<CredentialDefinitionContract>;
+  public createCredentialDefinition(
+    credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<CredentialDefinitionContract>>;
+  public createCredentialDefinition(
+    credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<CredentialDefinitionContract>>;
+  public createCredentialDefinition(
+    credentialDefinitionFromSchemaParameters?: CredentialDefinitionFromSchemaParameters,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -81,35 +92,27 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
+    const consumes: string[] = ['application/json-patch+json', 'application/json', 'text/json', 'application/_*+json'];
     const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
     }
 
-    return this.httpClient.post<CredentialDefinitionContract>(`${this.basePath}/definitions/credentials`,
+    return this.httpClient.post<CredentialDefinitionContract>(
+      `${this.basePath}/definitions/credentials`,
       credentialDefinitionFromSchemaParameters,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -122,15 +125,33 @@ export class DefinitionsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createCredentialDefinitionForSchemaId(id: string, credentialDefinitionParameters?: CredentialDefinitionParameters, observe?: 'body', reportProgress?: boolean): Observable<CredentialDefinitionContract>;
-  public createCredentialDefinitionForSchemaId(id: string, credentialDefinitionParameters?: CredentialDefinitionParameters, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CredentialDefinitionContract>>;
-  public createCredentialDefinitionForSchemaId(id: string, credentialDefinitionParameters?: CredentialDefinitionParameters, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CredentialDefinitionContract>>;
-  public createCredentialDefinitionForSchemaId(id: string, credentialDefinitionParameters?: CredentialDefinitionParameters, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
+  public createCredentialDefinitionForSchemaId(
+    id: string,
+    credentialDefinitionParameters?: CredentialDefinitionParameters,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<CredentialDefinitionContract>;
+  public createCredentialDefinitionForSchemaId(
+    id: string,
+    credentialDefinitionParameters?: CredentialDefinitionParameters,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<CredentialDefinitionContract>>;
+  public createCredentialDefinitionForSchemaId(
+    id: string,
+    credentialDefinitionParameters?: CredentialDefinitionParameters,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<CredentialDefinitionContract>>;
+  public createCredentialDefinitionForSchemaId(
+    id: string,
+    credentialDefinitionParameters?: CredentialDefinitionParameters,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling createCredentialDefinitionForSchemaId.');
     }
-
 
     let headers = this.defaultHeaders;
 
@@ -145,35 +166,27 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
+    const consumes: string[] = ['application/json-patch+json', 'application/json', 'text/json', 'application/_*+json'];
     const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
     }
 
-    return this.httpClient.post<CredentialDefinitionContract>(`${this.basePath}/definitions/credentials/${encodeURIComponent(String(id))}`,
+    return this.httpClient.post<CredentialDefinitionContract>(
+      `${this.basePath}/definitions/credentials/${encodeURIComponent(String(id))}`,
       credentialDefinitionParameters,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -185,12 +198,26 @@ export class DefinitionsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createSchema(schemaParameters?: SchemaParameters, observe?: 'body', reportProgress?: boolean): Observable<DefinitionsSchemasPost200TextPlainResponse>;
-  public createSchema(schemaParameters?: SchemaParameters, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DefinitionsSchemasPost200TextPlainResponse>>;
-  public createSchema(schemaParameters?: SchemaParameters, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DefinitionsSchemasPost200TextPlainResponse>>;
-  public createSchema(schemaParameters?: SchemaParameters, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
-
+  public createSchema(
+    schemaParameters?: SchemaParameters,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<DefinitionsSchemasPost200TextPlainResponse>;
+  public createSchema(
+    schemaParameters?: SchemaParameters,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<DefinitionsSchemasPost200TextPlainResponse>>;
+  public createSchema(
+    schemaParameters?: SchemaParameters,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<DefinitionsSchemasPost200TextPlainResponse>>;
+  public createSchema(
+    schemaParameters?: SchemaParameters,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -204,35 +231,27 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
+    const consumes: string[] = ['application/json-patch+json', 'application/json', 'text/json', 'application/_*+json'];
     const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
     }
 
-    return this.httpClient.post<DefinitionsSchemasPost200TextPlainResponse>(`${this.basePath}/definitions/schemas`,
+    return this.httpClient.post<DefinitionsSchemasPost200TextPlainResponse>(
+      `${this.basePath}/definitions/schemas`,
       schemaParameters,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -244,12 +263,26 @@ export class DefinitionsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createVerificationDefinition(proofRequest?: ProofRequest, observe?: 'body', reportProgress?: boolean): Observable<VerificationDefinitionContract>;
-  public createVerificationDefinition(proofRequest?: ProofRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<VerificationDefinitionContract>>;
-  public createVerificationDefinition(proofRequest?: ProofRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<VerificationDefinitionContract>>;
-  public createVerificationDefinition(proofRequest?: ProofRequest, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
-
+  public createVerificationDefinition(
+    proofRequest?: ProofRequest,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<VerificationDefinitionContract>;
+  public createVerificationDefinition(
+    proofRequest?: ProofRequest,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<VerificationDefinitionContract>>;
+  public createVerificationDefinition(
+    proofRequest?: ProofRequest,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<VerificationDefinitionContract>>;
+  public createVerificationDefinition(
+    proofRequest?: ProofRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -263,37 +296,25 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
+    const consumes: string[] = ['application/json-patch+json', 'application/json', 'text/json', 'application/_*+json'];
     const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
     }
 
-    return this.httpClient.post<VerificationDefinitionContract>(`${this.basePath}/definitions/verifications`,
-      proofRequest,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.post<VerificationDefinitionContract>(`${this.basePath}/definitions/verifications`, proofRequest, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -303,11 +324,22 @@ export class DefinitionsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getCredentialDefinition(id: string, observe?: 'body', reportProgress?: boolean): Observable<CredentialDefinitionContract>;
-  public getCredentialDefinition(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CredentialDefinitionContract>>;
-  public getCredentialDefinition(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CredentialDefinitionContract>>;
+  public getCredentialDefinition(
+    id: string,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<CredentialDefinitionContract>;
+  public getCredentialDefinition(
+    id: string,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<CredentialDefinitionContract>>;
+  public getCredentialDefinition(
+    id: string,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<CredentialDefinitionContract>>;
   public getCredentialDefinition(id: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling getCredentialDefinition.');
     }
@@ -325,26 +357,22 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<CredentialDefinitionContract>(`${this.basePath}/definitions/credentials/${encodeURIComponent(String(id))}`,
+    return this.httpClient.get<CredentialDefinitionContract>(
+      `${this.basePath}/definitions/credentials/${encodeURIComponent(String(id))}`,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -356,11 +384,26 @@ export class DefinitionsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getVerificationDefinition(definitionId: string, observe?: 'body', reportProgress?: boolean): Observable<VerificationDefinitionContract>;
-  public getVerificationDefinition(definitionId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<VerificationDefinitionContract>>;
-  public getVerificationDefinition(definitionId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<VerificationDefinitionContract>>;
-  public getVerificationDefinition(definitionId: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
+  public getVerificationDefinition(
+    definitionId: string,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<VerificationDefinitionContract>;
+  public getVerificationDefinition(
+    definitionId: string,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<VerificationDefinitionContract>>;
+  public getVerificationDefinition(
+    definitionId: string,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<VerificationDefinitionContract>>;
+  public getVerificationDefinition(
+    definitionId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     if (definitionId === null || definitionId === undefined) {
       throw new Error('Required parameter definitionId was null or undefined when calling getVerificationDefinition.');
     }
@@ -378,26 +421,22 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<VerificationDefinitionContract>(`${this.basePath}/definitions/verifications/${encodeURIComponent(String(definitionId))}`,
+    return this.httpClient.get<VerificationDefinitionContract>(
+      `${this.basePath}/definitions/verifications/${encodeURIComponent(String(definitionId))}`,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -409,10 +448,15 @@ export class DefinitionsService {
    * @param reportProgress flag to report request and response progress.
    */
   public listCredentialDefinitions(observe?: 'body', reportProgress?: boolean): Observable<CredentialDefinitionContractArray>;
-  public listCredentialDefinitions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CredentialDefinitionContractArray>>;
-  public listCredentialDefinitions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CredentialDefinitionContractArray>>;
+  public listCredentialDefinitions(
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<CredentialDefinitionContractArray>>;
+  public listCredentialDefinitions(
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<CredentialDefinitionContractArray>>;
   public listCredentialDefinitions(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -426,28 +470,21 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<CredentialDefinitionContractArray>(`${this.basePath}/definitions/credentials`,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.get<CredentialDefinitionContractArray>(`${this.basePath}/definitions/credentials`, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -460,7 +497,6 @@ export class DefinitionsService {
   public listSchemas(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SchemaRecordArray>>;
   public listSchemas(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SchemaRecordArray>>;
   public listSchemas(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -474,28 +510,21 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<SchemaRecordArray>(`${this.basePath}/definitions/schemas`,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.get<SchemaRecordArray>(`${this.basePath}/definitions/schemas`, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -505,10 +534,15 @@ export class DefinitionsService {
    * @param reportProgress flag to report request and response progress.
    */
   public listVerificationDefinitions(observe?: 'body', reportProgress?: boolean): Observable<VerificationDefinitionContractArray>;
-  public listVerificationDefinitions(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<VerificationDefinitionContractArray>>;
-  public listVerificationDefinitions(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<VerificationDefinitionContractArray>>;
+  public listVerificationDefinitions(
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<VerificationDefinitionContractArray>>;
+  public listVerificationDefinitions(
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<VerificationDefinitionContractArray>>;
   public listVerificationDefinitions(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -522,28 +556,20 @@ export class DefinitionsService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<VerificationDefinitionContractArray>(`${this.basePath}/definitions/verifications`,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.get<VerificationDefinitionContractArray>(`${this.basePath}/definitions/verifications`, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
-
 }

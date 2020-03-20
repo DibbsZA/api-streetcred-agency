@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { CommonUploadPost200ApplicationJsonResponse } from '../model/commonUploadPost200ApplicationJsonResponse';
 import { NetworkContractArray } from '../model/networkContractArray';

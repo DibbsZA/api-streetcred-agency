@@ -1,12 +1,8 @@
-
 import { Inject, Injectable, Optional } from '@angular/core';
-import {
-  HttpClient, HttpHeaders, HttpParams,
-  HttpResponse, HttpEvent
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpEvent } from '@angular/common/http';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { WebhookContract } from '../model/webhookContract';
 import { WebhookContractArray } from '../model/webhookContractArray';
@@ -15,15 +11,17 @@ import { WebhookParameters } from '../model/webhookParameters';
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
 
-
 @Injectable()
 export class WebhooksService {
-
   protected basePath = 'https://api.streetcred.id/agency/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 
-  constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+  constructor(
+    protected httpClient: HttpClient,
+    @Optional() @Inject(BASE_PATH) basePath: string,
+    @Optional() configuration: Configuration
+  ) {
     if (basePath) {
       this.basePath = basePath;
     }
@@ -47,7 +45,6 @@ export class WebhooksService {
     return false;
   }
 
-
   /**
    * Create new webhook
    * Create new webhook
@@ -55,12 +52,26 @@ export class WebhooksService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createWebhook(webhookParameters?: WebhookParameters, observe?: 'body', reportProgress?: boolean): Observable<WebhookContract>;
-  public createWebhook(webhookParameters?: WebhookParameters, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WebhookContract>>;
-  public createWebhook(webhookParameters?: WebhookParameters, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WebhookContract>>;
-  public createWebhook(webhookParameters?: WebhookParameters, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
-
+  public createWebhook(
+    webhookParameters?: WebhookParameters,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<WebhookContract>;
+  public createWebhook(
+    webhookParameters?: WebhookParameters,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<WebhookContract>>;
+  public createWebhook(
+    webhookParameters?: WebhookParameters,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<WebhookContract>>;
+  public createWebhook(
+    webhookParameters?: WebhookParameters,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -74,37 +85,25 @@ export class WebhooksService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json-patch+json',
-      'application/json',
-      'text/json',
-      'application/_*+json'
-    ];
+    const consumes: string[] = ['application/json-patch+json', 'application/json', 'text/json', 'application/_*+json'];
     const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
     }
 
-    return this.httpClient.post<WebhookContract>(`${this.basePath}/webhooks`,
-      webhookParameters,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.post<WebhookContract>(`${this.basePath}/webhooks`, webhookParameters, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -118,7 +117,6 @@ export class WebhooksService {
   public disableWebhook(webhookId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
   public disableWebhook(webhookId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
   public disableWebhook(webhookId: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     if (webhookId === null || webhookId === undefined) {
       throw new Error('Required parameter webhookId was null or undefined when calling disableWebhook.');
     }
@@ -136,26 +134,21 @@ export class WebhooksService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-    ];
+    const httpHeaderAccepts: string[] = [];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.put<any>(`${this.basePath}/webhooks/${encodeURIComponent(String(webhookId))}/disable`,
-      null,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.put<any>(`${this.basePath}/webhooks/${encodeURIComponent(String(webhookId))}/disable`, null, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -169,7 +162,6 @@ export class WebhooksService {
   public enableWebhook(webhookId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
   public enableWebhook(webhookId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
   public enableWebhook(webhookId: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     if (webhookId === null || webhookId === undefined) {
       throw new Error('Required parameter webhookId was null or undefined when calling enableWebhook.');
     }
@@ -187,26 +179,21 @@ export class WebhooksService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-    ];
+    const httpHeaderAccepts: string[] = [];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.put<any>(`${this.basePath}/webhooks/${encodeURIComponent(String(webhookId))}/enable`,
-      null,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.put<any>(`${this.basePath}/webhooks/${encodeURIComponent(String(webhookId))}/enable`, null, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -219,7 +206,6 @@ export class WebhooksService {
   public listWebhooks(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WebhookContractArray>>;
   public listWebhooks(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WebhookContractArray>>;
   public listWebhooks(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -233,28 +219,21 @@ export class WebhooksService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'text/plain',
-      'application/json',
-      'text/json'
-    ];
+    const httpHeaderAccepts: string[] = ['text/plain', 'application/json', 'text/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<WebhookContractArray>(`${this.basePath}/webhooks`,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.get<WebhookContractArray>(`${this.basePath}/webhooks`, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -268,7 +247,6 @@ export class WebhooksService {
   public removeWebhook(webhookId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
   public removeWebhook(webhookId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
   public removeWebhook(webhookId: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     if (webhookId === null || webhookId === undefined) {
       throw new Error('Required parameter webhookId was null or undefined when calling removeWebhook.');
     }
@@ -286,25 +264,20 @@ export class WebhooksService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-    ];
+    const httpHeaderAccepts: string[] = [];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.delete<any>(`${this.basePath}/webhooks/${encodeURIComponent(String(webhookId))}`,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.delete<any>(`${this.basePath}/webhooks/${encodeURIComponent(String(webhookId))}`, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
-
 }

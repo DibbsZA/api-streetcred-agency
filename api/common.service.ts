@@ -1,9 +1,5 @@
-
 import { Inject, Injectable, Optional } from '@angular/core';
-import {
-  HttpClient, HttpHeaders, HttpParams,
-  HttpResponse, HttpEvent
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse, HttpEvent } from '@angular/common/http';
 import { CustomHttpUrlEncodingCodec } from '../encoder';
 
 import { Observable } from 'rxjs';
@@ -15,15 +11,17 @@ import { NetworkTxnAgreementContract } from '../model/networkTxnAgreementContrac
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
 
-
 @Injectable()
 export class CommonService {
-
   protected basePath = 'https://api.streetcred.id/agency/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
 
-  constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+  constructor(
+    protected httpClient: HttpClient,
+    @Optional() @Inject(BASE_PATH) basePath: string,
+    @Optional() configuration: Configuration
+  ) {
     if (basePath) {
       this.basePath = basePath;
     }
@@ -47,7 +45,6 @@ export class CommonService {
     return false;
   }
 
-
   /**
    * Accept the latest transaction author agreement on the specified network.
    * Accept the latest transaction author agreement on the specified network.
@@ -56,10 +53,21 @@ export class CommonService {
    * @param reportProgress flag to report request and response progress.
    */
   public acceptTransactionAuthorAgreement(networkId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-  public acceptTransactionAuthorAgreement(networkId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-  public acceptTransactionAuthorAgreement(networkId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-  public acceptTransactionAuthorAgreement(networkId: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
+  public acceptTransactionAuthorAgreement(
+    networkId: string,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<any>>;
+  public acceptTransactionAuthorAgreement(
+    networkId: string,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<any>>;
+  public acceptTransactionAuthorAgreement(
+    networkId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     if (networkId === null || networkId === undefined) {
       throw new Error('Required parameter networkId was null or undefined when calling acceptTransactionAuthorAgreement.');
     }
@@ -77,24 +85,23 @@ export class CommonService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-    ];
+    const httpHeaderAccepts: string[] = [];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.put<any>(`${this.basePath}/common/networks/${encodeURIComponent(String(networkId))}/txnAuthorAgreement`,
+    return this.httpClient.put<any>(
+      `${this.basePath}/common/networks/${encodeURIComponent(String(networkId))}/txnAuthorAgreement`,
       null,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -106,11 +113,26 @@ export class CommonService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getTransactionAuthorAgreement(networkId: string, observe?: 'body', reportProgress?: boolean): Observable<NetworkTxnAgreementContract>;
-  public getTransactionAuthorAgreement(networkId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NetworkTxnAgreementContract>>;
-  public getTransactionAuthorAgreement(networkId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NetworkTxnAgreementContract>>;
-  public getTransactionAuthorAgreement(networkId: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
+  public getTransactionAuthorAgreement(
+    networkId: string,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<NetworkTxnAgreementContract>;
+  public getTransactionAuthorAgreement(
+    networkId: string,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<NetworkTxnAgreementContract>>;
+  public getTransactionAuthorAgreement(
+    networkId: string,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<NetworkTxnAgreementContract>>;
+  public getTransactionAuthorAgreement(
+    networkId: string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     if (networkId === null || networkId === undefined) {
       throw new Error('Required parameter networkId was null or undefined when calling getTransactionAuthorAgreement.');
     }
@@ -128,24 +150,22 @@ export class CommonService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
+    const httpHeaderAccepts: string[] = ['application/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<NetworkTxnAgreementContract>(`${this.basePath}/common/networks/${encodeURIComponent(String(networkId))}/txnAuthorAgreement`,
+    return this.httpClient.get<NetworkTxnAgreementContract>(
+      `${this.basePath}/common/networks/${encodeURIComponent(String(networkId))}/txnAuthorAgreement`,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
@@ -160,7 +180,6 @@ export class CommonService {
   public listNetworks(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NetworkContractArray>>;
   public listNetworks(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NetworkContractArray>>;
   public listNetworks(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
     let headers = this.defaultHeaders;
 
     // authentication (accessToken) required
@@ -174,26 +193,21 @@ export class CommonService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
+    const httpHeaderAccepts: string[] = ['application/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-    ];
+    const consumes: string[] = [];
 
-    return this.httpClient.get<NetworkContractArray>(`${this.basePath}/common/networks`,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers,
-        observe,
-        reportProgress
-      }
-    );
+    return this.httpClient.get<NetworkContractArray>(`${this.basePath}/common/networks`, {
+      withCredentials: this.configuration.withCredentials,
+      headers,
+      observe,
+      reportProgress,
+    });
   }
 
   /**
@@ -205,16 +219,37 @@ export class CommonService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public uploadImage(uploadedFiles: Blob, filename?: string, contentType?: string, observe?: 'body', reportProgress?: boolean): Observable<CommonUploadPost200ApplicationJsonResponse>;
-  public uploadImage(uploadedFiles: Blob, filename?: string, contentType?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<CommonUploadPost200ApplicationJsonResponse>>;
-  public uploadImage(uploadedFiles: Blob, filename?: string, contentType?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<CommonUploadPost200ApplicationJsonResponse>>;
-  public uploadImage(uploadedFiles: Blob, filename?: string, contentType?: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
-
+  public uploadImage(
+    uploadedFiles: Blob,
+    filename?: string,
+    contentType?: string,
+    observe?: 'body',
+    reportProgress?: boolean
+  ): Observable<CommonUploadPost200ApplicationJsonResponse>;
+  public uploadImage(
+    uploadedFiles: Blob,
+    filename?: string,
+    contentType?: string,
+    observe?: 'response',
+    reportProgress?: boolean
+  ): Observable<HttpResponse<CommonUploadPost200ApplicationJsonResponse>>;
+  public uploadImage(
+    uploadedFiles: Blob,
+    filename?: string,
+    contentType?: string,
+    observe?: 'events',
+    reportProgress?: boolean
+  ): Observable<HttpEvent<CommonUploadPost200ApplicationJsonResponse>>;
+  public uploadImage(
+    uploadedFiles: Blob,
+    filename?: string,
+    contentType?: string,
+    observe: any = 'body',
+    reportProgress: boolean = false
+  ): Observable<any> {
     if (uploadedFiles === null || uploadedFiles === undefined) {
       throw new Error('Required parameter uploadedFiles was null or undefined when calling uploadImage.');
     }
-
-
 
     let headers = this.defaultHeaders;
 
@@ -229,22 +264,18 @@ export class CommonService {
     }
 
     // to determine the Accept header
-    const httpHeaderAccepts: string[] = [
-      'application/json'
-    ];
+    const httpHeaderAccepts: string[] = ['application/json'];
     const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     if (httpHeaderAcceptSelected !== undefined) {
       headers = headers.set('Accept', httpHeaderAcceptSelected);
     }
 
     // to determine the Content-Type header
-    const consumes: string[] = [
-      'multipart/form-data'
-    ];
+    const consumes: string[] = ['multipart/form-data'];
 
     const canConsumeForm = this.canConsumeForm(consumes);
 
-    let formParams: { append(param: string, value: any): void; };
+    let formParams: { append(param: string, value: any): void };
     let useForm = false;
     const convertFormParamsToString = false;
     // use FormData to transmit files using content-type "multipart/form-data"
@@ -257,24 +288,27 @@ export class CommonService {
     }
 
     if (uploadedFiles !== undefined) {
-      formParams = formParams.append('uploadedFiles', uploadedFiles as any) || formParams;
+      //formParams =
+      formParams.append('uploadedFiles', uploadedFiles as any); // || formParams;
     }
     if (filename !== undefined) {
-      formParams = formParams.append('filename', filename as any) || formParams;
+      //formParams =
+      formParams.append('filename', filename as any); // || formParams;
     }
     if (contentType !== undefined) {
-      formParams = formParams.append('contentType', contentType as any) || formParams;
+      //formParams =
+      formParams.append('contentType', contentType as any); // || formParams;
     }
 
-    return this.httpClient.post<CommonUploadPost200ApplicationJsonResponse>(`${this.basePath}/common/upload`,
+    return this.httpClient.post<CommonUploadPost200ApplicationJsonResponse>(
+      `${this.basePath}/common/upload`,
       convertFormParamsToString ? formParams.toString() : formParams,
       {
         withCredentials: this.configuration.withCredentials,
         headers,
         observe,
-        reportProgress
+        reportProgress,
       }
     );
   }
-
 }
